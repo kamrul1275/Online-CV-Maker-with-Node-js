@@ -1,19 +1,14 @@
-// models/Education.js
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const User = require('./User');
 
-const Education = sequelize.define('Education', {
-    degree: {
+const Language = sequelize.define('Language', {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    institution: {
+    proficiency: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    year: {
-        type: DataTypes.INTEGER,
         allowNull: false
     },
     userId: {
@@ -25,10 +20,18 @@ const Education = sequelize.define('Education', {
         }
     }
 }, {
-    tableName: 'educations',
+    tableName: 'languages',
     timestamps: false
 });
 
-Education.belongsTo(User, { foreignKey: 'userId' });
+Language.belongsTo(User, { foreignKey: 'userId' });
 
-module.exports = Education;
+sequelize.sync()
+    .then(() => {
+        console.log('Language table has been created.');
+    })
+    .catch(error => {
+        console.error('Unable to create Language table:', error.message);
+    });
+
+module.exports = Language;

@@ -7,6 +7,10 @@ const Experience = sequelize.define('Experience', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    company: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     duration: {
         type: DataTypes.STRING,
         allowNull: false
@@ -33,12 +37,12 @@ Experience.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Experience, { foreignKey: 'userId' });
 
 // Sync the model with the database
-sequelize.sync()
-    .then(() => {
-        console.log('Experience table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create table : ', error.message);
-    });
+// sequelize.sync()
+//     .then(() => {
+//         console.log('Experience table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create table : ', error.message);
+//     });
 
 module.exports = Experience;

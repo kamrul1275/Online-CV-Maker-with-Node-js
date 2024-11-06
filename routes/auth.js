@@ -15,6 +15,8 @@ router.post('/register', upload.none(), authController.register);
 router.post('/login', upload.none(), authController.login);
 
 router.get('/users', authController.getUsers);
+router.get('/users/search', authController.searchUsers);
+
 router.get('/users/dashboard', authMiddleware, authController.dashboard);
 router.get('/users/:id', authController.getUserById);
 router.put('/users/:id', upload.none(), authController.updateUser); // Use multer for form-data

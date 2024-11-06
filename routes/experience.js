@@ -13,7 +13,7 @@ const upload = multer(); // Initialize multer
 // Define routes
 router.get('/experience', experienceController.getAllExperiences);
 router.get('/experience/:id', experienceController.getExperienceById);
-router.post('/experience', experienceController.createExperience);
+router.post('/experience/create', experienceController.createExperience);
 router.put('/experience/:id', experienceController.updateExperience);
 router.delete('/experience/:id', experienceController.deleteExperience);
 

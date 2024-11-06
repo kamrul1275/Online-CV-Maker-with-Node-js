@@ -109,17 +109,38 @@ exports.login = async (req, res) => {
 // Define the dashboard function
 
 // Define the getUsers function
+// exports.getUsers = async (req, res) => {
+//     try {
+//         const users = await User.findAll();
+//         res.status(200).json(users);
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// };//end of getUsers function
+
 exports.getUsers = async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page if not provided
+    const offset = (page - 1) * limit;
+
     try {
-        const users = await User.findAll();
-        res.status(200).json(users);
+        const users = await User.findAndCountAll({
+            limit: limit,
+            offset: offset
+        });
+
+        res.status(200).json({
+            totalItems: users.count,
+            totalPages: Math.ceil(users.count / limit),
+            currentPage: page,
+            users: users.rows
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
-};//end of getUsers function
-
-
+}; //end of getUsers function
 
 // // Define the getUserById function
 exports.getUserById = async (req, res) => {
@@ -137,40 +158,33 @@ exports.getUserById = async (req, res) => {
     }
 };//end of getUserById function
 
-// // Define the updateUser function
-// // Define the updateUser function
-// exports.updateUser = async (req, res) => {
-//     const id = req.params.id;
-//     const { name, username, email, password } = req.body;
 
-//     try {
-//         const user = await User.findByPk(id);
-//         if (!user) {
-//             return res.status(404).json({ message: 'User not found' });
-//         }// Validate input data
-//         else if (!user.name || !user.username || !user.email || !user.password) {
-//             return res.status(400).json({ message: 'Please provide all required fields' });
-//         }
-//         // Update user fields
-//         user.name = name || user.name;
-//         user.username = username || user.username;
-//         user.email = email || user.email;
 
-//         console.log("check name:", user.name);
 
-//         if (password) {
-//             // Hash the password
-//             const salt = await bcrypt.genSalt(10);
-//             user.password = await bcrypt.hash(password, salt);
-//         }
 
-//         await user.save();
-//         res.status(200).json({ message: 'User updated successfully...' });
-//     } catch (error) {
-//         console.error("error", error.message);
-//         res.status(500).json({ message: 'Server error' });
-//     }
-// };//end of updateUser function
+exports.searchUsers = async (req, res) => {
+    const search = req.query.search || ''; // Extract search query parameter
+
+    try {
+        const users = await User.findAll({
+            where: {
+                name: {
+                    [Op.iLike]: `%${search}%` // Use iLike for case-insensitive search in PostgreSQL
+                }
+            }
+        });
+
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+}; //end of getUsers function
+
+
+
+
+
 
 // Define the updateUser function
 exports.updateUser = async (req, res) => {
