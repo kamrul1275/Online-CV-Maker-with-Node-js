@@ -3,8 +3,9 @@ const { Pool } = require('pg');
 const authRoute = require('./routes/auth');
 const skillRoute = require('./routes/skill');
 const experienceRoute = require('./routes/experience');
-const languageRoute = require('./routes/language');
 const educationRoute = require('./routes/education');
+const languageRoute = require('./routes/language');
+const cvgenerateRoute = require('./routes/cvgenerate');
 
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -34,6 +35,9 @@ app.use('/api/language', languageRoute);
 
 //education
 app.use('/api/education', educationRoute);
+
+// cvgenerate
+app.use('/api', cvgenerateRoute);
 
 // Start server
 const server = app.listen(port, () => {

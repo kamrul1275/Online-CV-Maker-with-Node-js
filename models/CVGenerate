@@ -1,0 +1,70 @@
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
+const User = require('./User');
+const Education = require('./Education');
+const Experience = require('./Experience');
+const Skill = require('./Skill');
+const Language = require('./Language');
+
+
+
+
+const CVGenerate = sequelize.define('CVGenerate', {
+
+    id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    title: {
+        type: new DataTypes.STRING(128),
+        allowNull: false,
+    },
+    description: {
+        type: new DataTypes.STRING(1024),
+        allowNull: false,
+    },
+    user_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+    education_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+    experience_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+    skill_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+    language_id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
+    },
+},
+    {
+        tableName: 'cv_generates',
+        sequelize, // passing the `sequelize` instance is required
+    }
+);
+
+// Define associations
+CVGenerate.belongsTo(User, { foreignKey: 'user_id' });
+CVGenerate.belongsTo(Education, { foreignKey: 'education_id' });
+CVGenerate.belongsTo(Experience, { foreignKey: 'experience_id' });
+CVGenerate.belongsTo(Skill, { foreignKey: 'skill_id' });
+CVGenerate.belongsTo(Language, { foreignKey: 'language_id' });
+
+
+sequelize.sync()
+    .then(() => {
+        console.log('CVGenerate table has been created.');
+    })
+    .catch(error => {
+        console.error('Unable to create Language table:', error.message);
+    });
+
+module.exports = CVGenerate;

@@ -26,12 +26,12 @@ const Language = sequelize.define('Language', {
 
 Language.belongsTo(User, { foreignKey: 'userId' });
 
-sequelize.sync()
-    .then(() => {
-        console.log('Language table has been created.');
-    })
-    .catch(error => {
-        console.error('Unable to create Language table:', error.message);
-    });
+// sequelize.sync()
+//     .then(() => {
+//         console.log('Language table has been created.');
+//     })
+//     .catch(error => {
+//         console.error('Unable to create Language table:', error.message);
+//     });
 
 module.exports = Language;
